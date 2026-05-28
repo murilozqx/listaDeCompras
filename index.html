@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Compras</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Lista de Compras</h1>
+
+    <form id="shopping-form" class="shopping-form">
+      <input
+        type="number"
+        id="quantity-input"
+        placeholder="Qtd."
+        min="1"
+        value="1"
+      />
+      <input
+        type="text"
+        id="item-input"
+        placeholder="Adicione um item"
+        autocomplete="off"
+      />
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <section class="list-section">
+      <ul id="shopping-list" class="shopping-list"></ul>
+      <div class="actions">
+        <button id="clear-list">Limpar lista</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
