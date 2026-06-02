@@ -15,6 +15,29 @@ function saveItems(items) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 
+function saveItemName(index, inputElement) {
+  const nextName = inputElement.value.trim();
+
+  if (!nextName) {
+    inputElement.focus();
+    return;
+  }
+
+  const items = loadItems();
+  const duplicate = items.some(
+    (item, itemIndex) => itemIndex !== index && item.name.toLowerCase() === nextName.toLowerCase()
+  );
+
+  if (duplicate) {
+    inputElement.focus();
+    return;
+  }
+
+  items[index].name = nextName;
+  saveItems(items);
+  renderList();
+}
+
 function createListItem(item, index) {
   const li = document.createElement('li');
 
@@ -36,16 +59,56 @@ function createListItem(item, index) {
   itemName.className = 'item-name';
   itemName.textContent = item.name;
 
+  const editButton = document.createElement('button');
+  editButton.textContent = 'Editar';
+  editButton.type = 'button';
+  editButton.className = 'edit-button';
+  editButton.addEventListener('click', () => {
+    if (editButton.dataset.mode === 'save') {
+      const inputElement = li.querySelector('.item-edit-input');
+      if (inputElement) {
+        saveItemName(index, inputElement);
+      }
+      return;
+    }
+
+    const editInput = document.createElement('input');
+    editInput.type = 'text';
+    editInput.value = item.name;
+    editInput.className = 'item-edit-input';
+    editInput.addEventListener('blur', () => {
+      saveItemName(index, editInput);
+    });
+    editInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        renderList();
+        return;
+      }
+
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        saveItemName(index, editInput);
+      }
+    });
+
+    itemName.replaceWith(editInput);
+    editButton.textContent = 'Salvar';
+    editButton.dataset.mode = 'save';
+    editInput.focus();
+    editInput.select();
+  });
+
   const deleteButton = document.createElement('button');
   deleteButton.textContent = 'Remover';
   deleteButton.type = 'button';
+  deleteButton.className = 'remove-button';
   deleteButton.addEventListener('click', () => {
     removeItem(index);
   });
 
   const rightActions = document.createElement('div');
   rightActions.className = 'item-actions';
-  rightActions.append(deleteButton);
+  rightActions.append(editButton, deleteButton);
 
   li.append(quantityField, itemName, rightActions);
   return li;
@@ -93,7 +156,7 @@ function addItem(event) {
   );
 
   if (duplicate) {
-    input.value = '';
+    input.value = ' ';
     quantityInput.value = '1';
     input.focus();
     return;
@@ -101,7 +164,7 @@ function addItem(event) {
 
   items.push({ name: newItem, quantity });
   saveItems(items);
-  input.value = '';
+  input.value = ' ';
   quantityInput.value = '1';
   renderList();
 }

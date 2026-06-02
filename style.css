@@ -102,7 +102,22 @@ h1 {
 .shopping-list li .item-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+}
+
+.shopping-list li .item-edit-input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid #dbe5ee;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.shopping-list li .item-edit-input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.16);
 }
 
 .shopping-list li input.item-quantity {
@@ -122,12 +137,20 @@ h1 {
 .shopping-list li button {
   border: none;
   background: transparent;
-  color: #c1272d;
+  color: #4a90e2;
   font-weight: 700;
   cursor: pointer;
 }
 
 .shopping-list li button:hover {
+  color: #4075c4;
+}
+
+.shopping-list li .remove-button {
+  color: #c1272d;
+}
+
+.shopping-list li .remove-button:hover {
   color: #8a131d;
 }
 
